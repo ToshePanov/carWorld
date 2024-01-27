@@ -13,11 +13,11 @@ module.exports = {
       },
       colors: {
         "black-100": "#2B2C35",
-        "primary-orange": {
-          DEFAULT: "#ea580c",
-          100: "#f79761",
+        "primary-orange": "#EA580C",
+        "secondary-blue": {
+          DEFAULT: "#2B59FF",
+          100: "#F5F8FF",
         },
-        "secondary-blue": "#2B59FF",
         "light-white": {
           DEFAULT: "rgba(59,60,152,0.03)",
           100: "rgba(59,60,152,0.02)",
