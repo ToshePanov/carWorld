@@ -1,8 +1,9 @@
 import Image from "next/image";
 
-import { CustomFilter, Hero, SearchBar, CarCard } from "@/components";
+import { CustomFilter, Hero, SearchBar, CarCard, ShowMore } from "@/components";
 import { fetchCars } from "@/utils";
 import { FilterProps } from "@/types";
+import { fuels, yearsOfProduction } from "@/constants";
 
 export default async function Home({ searchParams }: { searchParams: FilterProps }) {
   const allCars = await fetchCars({
@@ -27,8 +28,8 @@ export default async function Home({ searchParams }: { searchParams: FilterProps
           <SearchBar />
 
           <div className="home__filter-container">
-            <CustomFilter title="fuel" />
-            <CustomFilter title="year" />
+            <CustomFilter title="fuel" options={fuels} />
+            <CustomFilter title="year" options={yearsOfProduction} />
           </div>
         </div>
         {!isDataEmpty ? (
@@ -36,6 +37,10 @@ export default async function Home({ searchParams }: { searchParams: FilterProps
             <div className="home__cars-wrapper">
               {allCars?.map((car) => <CarCard car={car} />)}
             </div>
+            <ShowMore
+              pageNumber={(searchParams.limit || 10) / 10}
+              isNext={(searchParams.limit || 10) > allCars.length}
+            />
           </section>
         ) : (
           <div className="home__error-container">

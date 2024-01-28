@@ -17,7 +17,7 @@ const SearchButton = ({ styling }: { styling: string }) => (
 const SearchBar = () => {
     const [make, setMake] = useState("");
     const [model, setModel] = useState("");
-    const Router = useRouter();
+    const router = useRouter();
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -42,7 +42,7 @@ const SearchBar = () => {
             }
 
             const newPathname = `${window.location.pathname}?${searchParams.toString()}`
-            Router.push(newPathname);
+            router.push(newPathname);
         }
     }
 

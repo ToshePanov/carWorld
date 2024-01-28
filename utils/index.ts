@@ -14,13 +14,11 @@ export async function fetchCars(filters: FilterProps) {
     url.searchParams.append("year", `${year}`);
     url.searchParams.append("limit", `${limit}`);
     url.searchParams.append("fuel_type", `${fuel}`);
-    console.log(`${url}`);
 
     const response = await fetch(`${url}`,
         { headers: headers });
 
     const result = await response.json();
-    console.log(result);
     return result;
 }
 
@@ -53,4 +51,14 @@ export const generateCarImageUrl = (car: CarProps, angle?: string) => {
     url.searchParams.append("angle", `${angle}`);
 
     return `${url}`;
+}
+
+export const updateSearchParams = (type: string, value: string) => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    searchParams.set(type, value);
+
+    const newPathname = `${window.location.pathname}?${searchParams.toString()}`;
+
+    return newPathname;
 }
