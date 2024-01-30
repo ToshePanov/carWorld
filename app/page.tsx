@@ -1,20 +1,47 @@
+"use client";
+
 import Image from "next/image";
 
 import { CustomFilter, Hero, SearchBar, CarCard, ShowMore } from "@/components";
 import { fetchCars } from "@/utils";
-import { FilterProps } from "@/types";
 import { fuels, yearsOfProduction } from "@/constants";
+import { useEffect, useState } from "react";
 
-export default async function Home({ searchParams }: { searchParams: FilterProps }) {
-  const allCars = await fetchCars({
-    make: searchParams.make || "",
-    model: searchParams.model || "",
-    year: searchParams.year || 2023,
-    fuel: searchParams.fuel || "",
-    limit: searchParams.limit || 10
-  });
+export default function Home() {
+  const [allCars, setAllCars] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
+  const [make, setMake] = useState("");
+  const [model, setModel] = useState("");
+
+  const [fuel, setFuel] = useState("");
+  const [year, setYear] = useState(2023);
+  const [limit, setLimit] = useState(10);
+
+  const getCars = async () => {
+    setLoading(true);
+    try {
+      const result = await fetchCars({
+        make: make || "",
+        model: model || "",
+        year: year || 2023,
+        limit: limit || 10,
+        fuel: fuel || ""
+      })
+
+      setAllCars(result);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getCars();
+  }, [make, model, fuel, year, limit]);
+
+
 
   return (
     <main className="overflow-hidden">
@@ -25,21 +52,32 @@ export default async function Home({ searchParams }: { searchParams: FilterProps
           <p>Explore all the cars in the world</p>
         </div>
         <div className="home__filters">
-          <SearchBar />
+          <SearchBar setMake={setMake} setModel={setModel} />
 
           <div className="home__filter-container">
-            <CustomFilter title="fuel" options={fuels} />
-            <CustomFilter title="year" options={yearsOfProduction} />
+            <CustomFilter title="fuel" options={fuels} setFilter={setFuel} />
+            <CustomFilter title="year" options={yearsOfProduction} setFilter={setYear} />
           </div>
         </div>
-        {!isDataEmpty ? (
+        {allCars.length > 0 ? (
           <section>
             <div className="home__cars-wrapper">
               {allCars?.map((car) => <CarCard car={car} />)}
             </div>
+            {loading && (
+              <div className="mt-16 w-full flex-center">
+                <Image
+                  src="/loader.svg"
+                  alt="loader"
+                  width={50}
+                  height={50}
+                  className="object-contain" />
+              </div>
+            )}
             <ShowMore
-              pageNumber={(searchParams.limit || 10) / 10}
-              isNext={(searchParams.limit || 10) > allCars.length}
+              pageNumber={limit / 10}
+              isNext={limit > allCars.length}
+              setLimit={setLimit}
             />
           </section>
         ) : (

@@ -11,8 +11,8 @@ export interface CustomButtonProps {
 }
 
 export interface SearchMakeProps {
-    make: string;
-    setMake: (make: string) => void;
+    selected: string;
+    setSelected: (make: string) => void;
 }
 
 export interface CarProps {
@@ -46,9 +46,16 @@ export interface OptionProps {
 export interface CustomFilterProps {
     title: string;
     options: OptionProps[];
+    setFilter: (value: any) => void;
 }
 
 export interface ShowMoreProps {
     pageNumber: number;
     isNext: boolean;
+    setLimit: (value: number) => void;
+}
+
+export interface SearchBarProps {
+    setMake: (value: string) => void;
+    setModel: (value: string) => void;
 }

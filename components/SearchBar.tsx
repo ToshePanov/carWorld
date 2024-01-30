@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-
 import Image from "next/image";
-
 import { useRouter } from "next/navigation";
-
 import { SearchMake } from "./";
+import { SearchBarProps } from "@/types";
+
 
 const SearchButton = ({ styling }: { styling: string }) => (
     <button type="submit" className={`-ml-3 z-10 ${styling}`}>
@@ -14,42 +13,24 @@ const SearchButton = ({ styling }: { styling: string }) => (
     </button>
 );
 
-const SearchBar = () => {
-    const [make, setMake] = useState("");
-    const [model, setModel] = useState("");
+const SearchBar = ({ setMake, setModel }: SearchBarProps) => {
+    const [searchMake, setSearchMake] = useState("");
+    const [searchModel, setSearchModel] = useState("");
     const router = useRouter();
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (make === "" && model === "") {
+        if (searchMake === "" && searchModel === "") {
             return alert("Please fill in the search bar")
-        } else {
-            updateSearchParams(model.toLowerCase(), make.toLowerCase());
         }
-    }
-
-    const updateSearchParams = (model: string, make: string) => {
-        const searchParams = new URLSearchParams(window.location.search);
-        if (model) {
-            searchParams.set("model", model);
-        } else {
-            searchParams.delete("model");
-
-            if (make) {
-                searchParams.set("make", make);
-            } else {
-                searchParams.delete("make");
-            }
-
-            const newPathname = `${window.location.pathname}?${searchParams.toString()}`
-            router.push(newPathname);
-        }
+        setModel(searchModel);
+        setMake(searchMake);
     }
 
     return (
         <form className="searchbar" onSubmit={handleSearch}>
             <div className="searchbar__item">
-                <SearchMake make={make} setMake={setMake} />
+                <SearchMake selected={searchMake} setSelected={setSearchMake} />
 
                 <SearchButton styling="sm:hidden" />
             </div>
@@ -64,8 +45,8 @@ const SearchBar = () => {
                 <input
                     type="text"
                     name="model"
-                    value={model}
-                    onChange={(e) => setModel(e.target.value)}
+                    value={searchModel}
+                    onChange={(e) => setSearchModel(e.target.value)}
                     placeholder="Golf"
                     className="searchbar__input" />
                 <SearchButton styling="sm:hidden" />

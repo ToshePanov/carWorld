@@ -10,7 +10,7 @@ import { Combobox, Transition } from "@headlessui/react";
 import { makes } from "@/constants";
 
 
-const SearchMake = ({ make, setMake }: SearchMakeProps) => {
+const SearchMake = ({ selected, setSelected }: SearchMakeProps) => {
     const [query, setQuery] = useState("");
 
     const filteredMakes = query === ""
@@ -23,7 +23,7 @@ const SearchMake = ({ make, setMake }: SearchMakeProps) => {
 
     return (
         <div className="search-make">
-            <Combobox value={make} onChange={setMake}>
+            <Combobox value={selected} onChange={setSelected}>
                 <div className="relative w-full">
                     <Combobox.Button className="absolute top-[14px]" >
                         <Image src="car-logo.svg" width={20} height={20} className="ml-4" alt="Car Logo" />
